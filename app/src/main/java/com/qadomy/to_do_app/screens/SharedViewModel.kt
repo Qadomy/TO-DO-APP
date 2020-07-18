@@ -65,4 +65,14 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         return if (TextUtils.isEmpty(title) || TextUtils.isEmpty(description)) false
         else !(title.isEmpty() || description.isEmpty())
     }
+
+
+    // function for convert from priority to int
+    fun parsePriorityToInt(priority: Priority): Int {
+        return when (priority) {
+            Priority.HIGH -> 0
+            Priority.MEDIUM -> 1
+            Priority.LOW -> 2
+        }
+    }
 }
