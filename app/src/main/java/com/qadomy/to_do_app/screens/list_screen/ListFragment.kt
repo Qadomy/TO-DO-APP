@@ -1,9 +1,7 @@
 package com.qadomy.to_do_app.screens.list_screen
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.qadomy.to_do_app.R
@@ -21,7 +19,18 @@ class ListFragment : Fragment() {
             findNavController().navigate(R.id.action_listFragment_to_addFragment)
         }
 
+        view.list_layout.setOnClickListener {
+            findNavController().navigate(R.id.action_listFragment_to_updateFragment)
+        }
+
+
+        setHasOptionsMenu(true)
+
         return view
     }
 
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.list_fragment_menu, menu)
+    }
 }
