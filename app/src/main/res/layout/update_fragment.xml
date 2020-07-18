@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -13,7 +12,7 @@
         android:padding="24dp">
 
         <EditText
-            android:id="@+id/current_title_et"
+            android:id="@+id/update_title_et"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:background="@drawable/custom_input"
@@ -25,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Spinner
-            android:id="@+id/current_priorities_spinner"
+            android:id="@+id/update_priorities_spinner"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_marginTop="8dp"
@@ -36,12 +35,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/current_title_et" />
+            app:layout_constraintTop_toBottomOf="@+id/update_title_et" />
 
         <EditText
-            android:id="@+id/current_descriptions_et"
+            android:id="@+id/update_descriptions_et"
             android:layout_width="0dp"
-            android:layout_height="400dp"
+            android:layout_height="wrap_content"
+            android:paddingBottom="200dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/custom_input"
             android:ems="10"
@@ -51,11 +51,10 @@
             android:paddingStart="24dp"
             android:paddingTop="16dp"
             android:paddingEnd="24dp"
+            android:scrollbars="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_weight="12"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/current_priorities_spinner"
-            app:layout_constraintVertical_weight="13" />
+            app:layout_constraintTop_toBottomOf="@+id/update_priorities_spinner" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

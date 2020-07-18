@@ -12,7 +12,7 @@
         android:padding="24dp">
 
         <EditText
-            android:id="@+id/current_title_et"
+            android:id="@+id/add_title_et"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:background="@android:color/transparent"
@@ -24,7 +24,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Spinner
-            android:id="@+id/current_priorities_spinner"
+            android:id="@+id/add_priorities_spinner"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_marginTop="8dp"
@@ -35,15 +35,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/current_title_et" />
+            app:layout_constraintTop_toBottomOf="@+id/add_title_et" />
 
         <EditText
-            android:id="@+id/current_descriptions_et"
+            android:id="@+id/add_descriptions_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="@android:color/transparent"
             android:ems="10"
+            android:paddingBottom="200dp"
             android:gravity="start|top"
             android:hint="@string/descriptions"
             android:inputType="textMultiLine"
@@ -53,6 +54,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/current_priorities_spinner" />
+            app:layout_constraintTop_toBottomOf="@+id/add_priorities_spinner" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
