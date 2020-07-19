@@ -12,12 +12,15 @@ import com.google.android.material.snackbar.Snackbar
 import com.qadomy.to_do_app.R
 import com.qadomy.to_do_app.adapter.MyListAdapter
 import com.qadomy.to_do_app.data.viewmodel.TodoViewModel
+import com.qadomy.to_do_app.screens.SharedViewModel
 import kotlinx.android.synthetic.main.list_fragment.view.*
 
 class ListFragment : Fragment() {
 
     private val mTodoViewModel: TodoViewModel by viewModels()
+    private val mSharedViewModel: SharedViewModel by viewModels()
     private val adapter: MyListAdapter by lazy { MyListAdapter() }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,7 +40,21 @@ class ListFragment : Fragment() {
         val recyclerView = view.recyclerView_list
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
-        mTodoViewModel.getAllData.observe(viewLifecycleOwner, Observer { adapter.setData(it) })
+        mTodoViewModel.getAllData.observe(viewLifecycleOwner, Observer {
+            mSharedViewModel.checkDatabaseEmpty(it)
+            adapter.setData(it)
+        })
+
+        // observe the emptyDatabase
+        mSharedViewModel.emptyDatabase.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                view?.no_data_imageView!!.visibility = View.VISIBLE
+                view?.no_data_textView!!.visibility = View.VISIBLE
+            } else {
+                view?.no_data_imageView!!.visibility = View.INVISIBLE
+                view?.no_data_textView!!.visibility = View.INVISIBLE
+            }
+        })
 
         // for display menu
         setHasOptionsMenu(true)
