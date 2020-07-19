@@ -7,6 +7,9 @@ import com.qadomy.to_do_app.data.model.ToDo
 class TodoRepository(private val todoDao: TodoDao) {
 
     val getAllData: LiveData<List<ToDo>> = todoDao.getAllData()
+    val sortByLowPriority: LiveData<List<ToDo>> = todoDao.sortByLowPriority()
+    val sortByHighPriority: LiveData<List<ToDo>> = todoDao.sortByHighPriority()
+
 
     suspend fun insertData(toDo: ToDo) {
         todoDao.insertData(toDo)
@@ -30,4 +33,6 @@ class TodoRepository(private val todoDao: TodoDao) {
     fun searchDatabase(searchQuery: String): LiveData<List<ToDo>> {
         return todoDao.searchDatabaseData(searchQuery)
     }
+
+
 }
