@@ -3,6 +3,7 @@ package com.qadomy.to_do_app.screens.list_screen
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -10,17 +11,16 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.qadomy.to_do_app.helper.SwipeToDelete
 import com.qadomy.to_do_app.R
 import com.qadomy.to_do_app.adapter.MyListAdapter
 import com.qadomy.to_do_app.data.model.ToDo
 import com.qadomy.to_do_app.data.viewmodel.TodoViewModel
 import com.qadomy.to_do_app.databinding.ListFragmentBinding
+import com.qadomy.to_do_app.helper.SwipeToDelete
 import com.qadomy.to_do_app.screens.SharedViewModel
 import jp.wasabeef.recyclerview.animators.SlideInDownAnimator
-import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 
-class ListFragment : Fragment() {
+class ListFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private val mTodoViewModel: TodoViewModel by viewModels()
     private val mSharedViewModel: SharedViewModel by viewModels()
@@ -116,8 +116,17 @@ class ListFragment : Fragment() {
     }
 
 
+    // region Menu
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.list_fragment_menu, menu)
+
+        // set search icon
+        val search = menu.findItem(R.id.menu_search)
+        val searchView = search.actionView as? SearchView
+
+        // Enables showing a submit button when the query is non-empty
+        searchView?.isSubmitButtonEnabled = true
+        searchView?.setOnQueryTextListener(this)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -125,6 +134,7 @@ class ListFragment : Fragment() {
             deleteAllDataFromDatabase()
         return super.onOptionsItemSelected(item)
     }
+    // endregion
 
 
     // function for delete all data from database
@@ -140,4 +150,33 @@ class ListFragment : Fragment() {
         builder.setMessage("Are you sure want to remove everything?")
         builder.create().show()
     }
+
+
+    // region SearchView overrides
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        if (query != null) {
+            searchThroughDatabase(query)
+        }
+        return true
+    }
+
+
+    override fun onQueryTextChange(query: String?): Boolean {
+        if (query != null) {
+            searchThroughDatabase(query)
+        }
+        return true
+    }
+
+    // function for get the text in search bar and find it in database
+    private fun searchThroughDatabase(query: String) {
+        val searchQuery = "%$query%"
+        mTodoViewModel.searchDatabase(searchQuery).observe(this, Observer { list ->
+            list?.let {
+                adapter.setData(it)
+            }
+        })
+    }
+
+    // endregion
 }
