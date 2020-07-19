@@ -6,14 +6,13 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.qadomy.to_do_app.R
 import com.qadomy.to_do_app.adapter.MyListAdapter
 import com.qadomy.to_do_app.data.viewmodel.TodoViewModel
+import com.qadomy.to_do_app.databinding.ListFragmentBinding
 import com.qadomy.to_do_app.screens.SharedViewModel
-import kotlinx.android.synthetic.main.list_fragment.view.*
 
 class ListFragment : Fragment() {
 
@@ -21,45 +20,47 @@ class ListFragment : Fragment() {
     private val mSharedViewModel: SharedViewModel by viewModels()
     private val adapter: MyListAdapter by lazy { MyListAdapter() }
 
+    private var _binding: ListFragmentBinding? = null
+    private val binding get() = _binding!!
 
+
+    // onDestroy, set _binding = null -> for avoid memory leaks
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
+    // onCreateView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.list_fragment, container, false)
 
-        view.floatingActionButton.setOnClickListener {
-            findNavController().navigate(R.id.action_listFragment_to_addFragment)
-        }
+        // data binding
+        _binding = ListFragmentBinding.inflate(inflater, container, false)
 
-        view.list_layout.setOnClickListener {
-            findNavController().navigate(R.id.action_listFragment_to_updateFragment)
-        }
+        binding.lifecycleOwner = this
+        binding.mSharedViewModel = mSharedViewModel
 
+        // setup recycler view
+        setupRecyclerView()
 
-        val recyclerView = view.recyclerView_list
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(requireActivity())
         mTodoViewModel.getAllData.observe(viewLifecycleOwner, Observer {
             mSharedViewModel.checkDatabaseEmpty(it)
             adapter.setData(it)
         })
 
-        // observe the emptyDatabase
-        mSharedViewModel.emptyDatabase.observe(viewLifecycleOwner, Observer {
-            if (it) {
-                view?.no_data_imageView!!.visibility = View.VISIBLE
-                view?.no_data_textView!!.visibility = View.VISIBLE
-            } else {
-                view?.no_data_imageView!!.visibility = View.INVISIBLE
-                view?.no_data_textView!!.visibility = View.INVISIBLE
-            }
-        })
 
         // for display menu
         setHasOptionsMenu(true)
 
-        return view
+        return binding.root
+    }
+
+    private fun setupRecyclerView() {
+        val recyclerView = binding.recyclerViewList
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireActivity())
     }
 
 

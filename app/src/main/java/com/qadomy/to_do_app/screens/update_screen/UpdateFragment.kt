@@ -3,7 +3,6 @@ package com.qadomy.to_do_app.screens.update_screen
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -12,9 +11,9 @@ import com.google.android.material.snackbar.Snackbar
 import com.qadomy.to_do_app.R
 import com.qadomy.to_do_app.data.model.ToDo
 import com.qadomy.to_do_app.data.viewmodel.TodoViewModel
+import com.qadomy.to_do_app.databinding.UpdateFragmentBinding
 import com.qadomy.to_do_app.screens.SharedViewModel
 import kotlinx.android.synthetic.main.update_fragment.*
-import kotlinx.android.synthetic.main.update_fragment.view.*
 
 class UpdateFragment : Fragment() {
 
@@ -22,22 +21,32 @@ class UpdateFragment : Fragment() {
     private val mSharedViewModel: SharedViewModel by viewModels()
     private val mTodoViewModel: TodoViewModel by viewModels()
 
+    private var _binding: UpdateFragmentBinding? = null
+    private val binding get() = _binding!!
+
+    // onDestroy, set _binding = null -> for avoid memory leaks
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
+    // onCreateView
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        val view = inflater.inflate(R.layout.update_fragment, container, false)
+        // data binding
+        _binding = UpdateFragmentBinding.inflate(inflater, container, false)
 
+        binding.args = args
         // set menu
         setHasOptionsMenu(true)
 
-        view.update_title_et.setText(args.currentItem.title)
-        view.update_descriptions_et.setText(args.currentItem.description)
-        view.update_priorities_spinner.setSelection(mSharedViewModel.parsePriorityToInt(args.currentItem.priority))
-        view.update_priorities_spinner.onItemSelectedListener = mSharedViewModel.listener
+        // set color fot spinner items
+        binding.updatePrioritiesSpinner.onItemSelectedListener = mSharedViewModel.listener
 
-        return view
+        return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -62,8 +71,8 @@ class UpdateFragment : Fragment() {
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)
         }
         builder.setNegativeButton("NO") { _, _ -> }
-        builder.setTitle("Delete '${args.currentItem.title}' ?")
-        builder.setMessage("Are you sure want to remove ${args.currentItem.title} ?")
+        builder.setTitle("Delete '${args.currentItem.title}'?")
+        builder.setMessage("Are you sure want to remove ${args.currentItem.title}..?")
         builder.create().show()
     }
 
@@ -84,7 +93,6 @@ class UpdateFragment : Fragment() {
             )
 
             mTodoViewModel.updateData(updateItem)
-            Toast.makeText(requireContext(), "Successfully Updated!!", Toast.LENGTH_SHORT).show()
 
             // navigate back to list fragment
             findNavController().navigate(R.id.action_updateFragment_to_listFragment)

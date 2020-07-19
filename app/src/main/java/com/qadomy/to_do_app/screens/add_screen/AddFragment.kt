@@ -54,8 +54,6 @@ class AddFragment : Fragment() {
         if (validation) {
             val newData = ToDo(0, title, mSharedViewModel.parsePriority(priority), description)
             todoViewModel.insertData(newData)
-            Toast.makeText(requireContext(), "Add new data successfully!", Toast.LENGTH_SHORT)
-                .show()
 
             // navigate back to list
             findNavController().navigate(R.id.action_addFragment_to_listFragment)
