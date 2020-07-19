@@ -13,8 +13,11 @@ import com.qadomy.to_do_app.data.model.ToDo
 
 class SharedViewModel(application: Application) : AndroidViewModel(application) {
 
-    // we set the init value as true for emptyDatabase
-    val emptyDatabase: MutableLiveData<Boolean> = MutableLiveData(true)
+    /**
+     * we set the init value as false for emptyDatabase until the (no data image and text)
+     * not showing when start the app
+     * */
+    val emptyDatabase: MutableLiveData<Boolean> = MutableLiveData(false)
 
     // function for check the emptyDatabase is empty or no and return true and false
     fun checkDatabaseEmpty(toDo: List<ToDo>) {
@@ -75,7 +78,6 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         return if (TextUtils.isEmpty(title) || TextUtils.isEmpty(description)) false
         else !(title.isEmpty() || description.isEmpty())
     }
-
 
 
 }

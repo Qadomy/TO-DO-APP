@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
-import com.qadomy.helper.SwipeToDelete
+import com.qadomy.to_do_app.helper.SwipeToDelete
 import com.qadomy.to_do_app.R
 import com.qadomy.to_do_app.adapter.MyListAdapter
 import com.qadomy.to_do_app.data.model.ToDo

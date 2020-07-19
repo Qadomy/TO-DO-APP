@@ -1,4 +1,4 @@
-package com.qadomy.helper
+package com.qadomy.to_do_app.helper
 
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
