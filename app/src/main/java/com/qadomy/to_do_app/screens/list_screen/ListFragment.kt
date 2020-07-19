@@ -3,11 +3,15 @@ package com.qadomy.to_do_app.screens.list_screen
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import com.qadomy.helper.SwipeToDelete
 import com.qadomy.to_do_app.R
 import com.qadomy.to_do_app.adapter.MyListAdapter
 import com.qadomy.to_do_app.data.viewmodel.TodoViewModel
@@ -61,6 +65,29 @@ class ListFragment : Fragment() {
         val recyclerView = binding.recyclerViewList
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
+
+        // swipe to delete
+        swipeToDelete(recyclerView)
+    }
+
+
+    // function for delete items from recycle view when swipe to left
+    private fun swipeToDelete(recyclerView: RecyclerView) {
+        val swipeToDeleteCallback = object : SwipeToDelete() {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val itemToDelete = adapter.dataList[viewHolder.adapterPosition]
+                mTodoViewModel.deleteData(itemToDelete)
+
+                Toast.makeText(
+                    requireContext(),
+                    "${itemToDelete.title} Successfully Removed",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
 

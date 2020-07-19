@@ -1,13 +1,20 @@
 package com.qadomy.to_do_app.binding
 
+import android.os.Build
 import android.view.View
 import android.widget.Spinner
+import androidx.annotation.RequiresApi
+import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.qadomy.to_do_app.R
 import com.qadomy.to_do_app.data.model.Priority
+import com.qadomy.to_do_app.data.model.ToDo
+import com.qadomy.to_do_app.screens.list_screen.ListFragmentDirections
 
 class BindingAdapter {
 
@@ -20,6 +27,16 @@ class BindingAdapter {
                 if (navigate) {
                     view.findNavController().navigate(R.id.action_listFragment_to_addFragment)
                 }
+            }
+        }
+
+
+        @BindingAdapter("android:sendDataToUpdateFragment")
+        @JvmStatic
+        fun navigateToAddFragment(view: ConstraintLayout, currentItem: ToDo) {
+            view.setOnClickListener {
+                val action = ListFragmentDirections.actionListFragmentToUpdateFragment(currentItem)
+                view.findNavController().navigate(action)
             }
         }
 
@@ -46,6 +63,24 @@ class BindingAdapter {
                 Priority.LOW -> {
                     view.setSelection(2)
                 }
+            }
+        }
+
+
+        @RequiresApi(Build.VERSION_CODES.M)
+        @BindingAdapter("android:parsePriorityColor")
+        @JvmStatic
+        fun parsePriorityColor(cardView: CardView, priority: Priority) {
+            when (priority) {
+                Priority.HIGH -> {
+                    cardView.setCardBackgroundColor(cardView.context.getColor(R.color.red))
+                }
+                Priority.MEDIUM -> cardView.setCardBackgroundColor(
+                    ContextCompat.getColor(cardView.context, android.R.color.holo_purple)
+                )
+                Priority.LOW -> cardView.setCardBackgroundColor(
+                    ContextCompat.getColor(cardView.context, android.R.color.holo_green_dark)
+                )
             }
         }
 
