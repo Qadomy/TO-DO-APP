@@ -3,7 +3,6 @@ package com.qadomy.to_do_app.screens.list_screen
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -14,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.qadomy.helper.SwipeToDelete
 import com.qadomy.to_do_app.R
 import com.qadomy.to_do_app.adapter.MyListAdapter
+import com.qadomy.to_do_app.data.model.ToDo
 import com.qadomy.to_do_app.data.viewmodel.TodoViewModel
 import com.qadomy.to_do_app.databinding.ListFragmentBinding
 import com.qadomy.to_do_app.screens.SharedViewModel
@@ -75,19 +75,37 @@ class ListFragment : Fragment() {
     private fun swipeToDelete(recyclerView: RecyclerView) {
         val swipeToDeleteCallback = object : SwipeToDelete() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val itemToDelete = adapter.dataList[viewHolder.adapterPosition]
-                mTodoViewModel.deleteData(itemToDelete)
+                val deletedItem = adapter.dataList[viewHolder.adapterPosition]
 
-                Toast.makeText(
-                    requireContext(),
-                    "${itemToDelete.title} Successfully Removed",
-                    Toast.LENGTH_SHORT
-                ).show()
+                // delete item
+                mTodoViewModel.deleteData(deletedItem)
+                adapter.notifyItemRemoved(viewHolder.adapterPosition)
+
+                // restore deleted item
+                restoreDeletedData(viewHolder.itemView, deletedItem, viewHolder.adapterPosition)
             }
         }
 
         val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
+    }
+
+
+    // function for restore the data after deleted
+    private fun restoreDeletedData(view: View, deletedItem: ToDo, adapterPosition: Int) {
+        /**
+         * if click undo button in snackBar we re-insert the data to database
+         */
+        val snackBar = Snackbar.make(
+            view,
+            "'${deletedItem.title}' Deleted Successfully",
+            Snackbar.LENGTH_LONG
+        )
+        snackBar.setAction("Undo") {
+            mTodoViewModel.insertData(deletedItem)
+            adapter.notifyItemChanged(adapterPosition)
+        }
+        snackBar.show()
     }
 
 
