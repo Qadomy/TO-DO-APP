@@ -17,6 +17,8 @@ import com.qadomy.to_do_app.data.model.ToDo
 import com.qadomy.to_do_app.data.viewmodel.TodoViewModel
 import com.qadomy.to_do_app.databinding.ListFragmentBinding
 import com.qadomy.to_do_app.screens.SharedViewModel
+import jp.wasabeef.recyclerview.animators.SlideInDownAnimator
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 
 class ListFragment : Fragment() {
 
@@ -65,6 +67,11 @@ class ListFragment : Fragment() {
         val recyclerView = binding.recyclerViewList
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
+
+        // add animation to recycle view list items
+        recyclerView.itemAnimator = SlideInDownAnimator().apply {
+            addDuration = 300
+        }
 
         // swipe to delete
         swipeToDelete(recyclerView)
