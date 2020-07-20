@@ -7,9 +7,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.google.android.material.snackbar.Snackbar
 import com.qadomy.to_do_app.R
 import com.qadomy.to_do_app.adapter.MyListAdapter
@@ -66,7 +64,12 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     private fun setupRecyclerView() {
         val recyclerView = binding.recyclerViewList
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(requireActivity())
+        // display as linear layout
+//        recyclerView.layoutManager = LinearLayoutManager(requireActivity())
+        // display as Grid layout
+//        recyclerView.layoutManager = GridLayoutManager(requireActivity(),3)
+        // display as Staggered Grid layout
+        recyclerView.layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
 
         // add animation to recycle view list items
         recyclerView.itemAnimator = SlideInDownAnimator().apply {
@@ -110,7 +113,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         )
         snackBar.setAction("Undo") {
             mTodoViewModel.insertData(deletedItem)
-            adapter.notifyItemChanged(adapterPosition)
+            //adapter.notifyItemChanged(adapterPosition)
         }
         snackBar.show()
     }

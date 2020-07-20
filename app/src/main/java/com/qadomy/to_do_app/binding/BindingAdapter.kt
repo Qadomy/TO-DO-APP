@@ -1,15 +1,14 @@
 package com.qadomy.to_do_app.binding
 
-import android.os.Build
 import android.view.View
 import android.widget.Spinner
-import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.findNavController
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.qadomy.to_do_app.R
 import com.qadomy.to_do_app.data.model.Priority
@@ -67,14 +66,14 @@ class BindingAdapter {
         }
 
 
-        @RequiresApi(Build.VERSION_CODES.M)
         @BindingAdapter("android:parsePriorityColor")
         @JvmStatic
         fun parsePriorityColor(cardView: CardView, priority: Priority) {
             when (priority) {
-                Priority.HIGH -> {
-                    cardView.setCardBackgroundColor(cardView.context.getColor(R.color.red))
-                }
+                Priority.HIGH -> cardView.setCardBackgroundColor(
+                    ContextCompat.getColor(cardView.context, android.R.color.holo_red_dark)
+                )
+
                 Priority.MEDIUM -> cardView.setCardBackgroundColor(
                     ContextCompat.getColor(cardView.context, android.R.color.holo_purple)
                 )
